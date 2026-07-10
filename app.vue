@@ -7,44 +7,27 @@
       <div class="blob blob-3"></div>
     </div>
 
-    <!-- 顶部导航 -->
+    <!-- 顶部导航 - Apple 风简洁头部 -->
     <header class="header">
       <nav class="nav">
-        <NuxtLink to="/" class="brand">
-          <span class="brand-icon">🔍</span>
+        <NuxtLink to="/" class="brand" aria-label="PanHub 首页">
+          <span class="brand-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
           <span class="brand-text">PanHub</span>
         </NuxtLink>
-
-        <!-- 移动端菜单按钮 -->
-        <button class="btn-icon nav-menu-btn" type="button" @click="showNavMenu = !showNavMenu" aria-label="导航菜单" title="导航菜单">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-
-        <!-- 桌面端导航链接 -->
-        <div class="nav-links">
-          <a
-            v-for="link in navLinks"
-            :key="link.name"
-            :href="link.isCurrent ? undefined : link.url"
-            :class="['nav-link', { active: link.isCurrent }]"
-            :target="link.isCurrent ? undefined : '_blank'"
-            :rel="link.isCurrent ? undefined : 'noopener noreferrer'">
-            {{ link.name }}
-          </a>
-        </div>
 
         <div class="nav-actions">
           <!-- 暗色模式切换 -->
           <ClientOnly>
             <button class="btn-icon" type="button" @click="toggleDark" :aria-label="isDark ? '切换到亮色模式' : '切换到暗色模式'" :title="isDark ? '亮色模式' : '暗色模式'">
-              <svg v-if="!isDark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg v-if="!isDark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
               </svg>
-              <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="5"></circle>
                 <line x1="12" y1="1" x2="12" y2="3"></line>
                 <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -57,43 +40,14 @@
               </svg>
             </button>
           </ClientOnly>
-          <!-- 社交链接 -->
-          <a
-            v-for="social in socialLinks"
-            :key="social.name"
-            :href="social.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-icon social-btn"
-            :aria-label="social.name"
-            :title="social.name"
-            v-html="social.icon" />
           <!-- 设置按钮 -->
           <button class="btn-icon" type="button" @click="openSettings = true" aria-label="打开设置" title="设置">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
             </svg>
           </button>
         </div>
-
-        <!-- 移动端下拉菜单 -->
-        <ClientOnly>
-          <Transition name="nav-menu">
-            <div v-if="showNavMenu" class="nav-dropdown">
-              <a
-                v-for="link in navLinks"
-                :key="link.name"
-                :href="link.isCurrent ? undefined : link.url"
-                :class="['nav-dropdown__link', { active: link.isCurrent }]"
-                :target="link.isCurrent ? undefined : '_blank'"
-                :rel="link.isCurrent ? undefined : 'noopener noreferrer'"
-                @click="showNavMenu = false">
-                {{ link.name }}
-              </a>
-            </div>
-          </Transition>
-        </ClientOnly>
       </nav>
     </header>
 
@@ -119,6 +73,19 @@
     <!-- 主内容区 -->
     <main class="main">
       <NuxtPage />
+
+      <!-- Google AdSense 广告位（页面底部，延迟加载不影响首屏） -->
+      <ClientOnly>
+        <aside class="ad-slot" aria-label="赞助内容">
+          <ins
+            class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-4044602309325996"
+            data-ad-slot="auto"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        </aside>
+      </ClientOnly>
     </main>
 
     <!-- 设置抽屉 -->
@@ -152,11 +119,20 @@
 import { ALL_PLUGIN_NAMES } from "./config/plugins";
 import channelsConfig from "~/config/channels.json";
 // 暗色模式：阻塞脚本设置 class + CSS 文件引入
+// 同时注入 Google AdSense 验证与远程脚本（async 不阻塞首屏渲染）
 useHead({
+  meta: [
+    { name: "google-adsense-account", content: "ca-pub-4044602309325996" },
+  ],
   link: [{ rel: "stylesheet", href: "/css/dark-mode.css" }],
   script: [
     {
       innerHTML: `(function(){var s=localStorage.getItem('panhub:dark-mode');var d=s==='dark'||(s!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')})();`,
+    },
+    {
+      src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4044602309325996",
+      async: true,
+      crossorigin: "anonymous",
     },
   ],
 });
@@ -167,37 +143,6 @@ const { isDark, toggle: toggleDark, init: initDarkMode } = useDarkMode();
 const auth = useAuth();
 const openSettings = ref(false);
 const showPasswordGate = ref(false);
-const showNavMenu = ref(false);
-
-// 导航链接
-const navLinks = [
-  { name: "首页", url: "https://shenzjd.com" },
-  { name: "Alist", url: "https://alist.shenzjd.com" },
-  { name: "网盘搜索", url: "https://panhub.shenzjd.com", isCurrent: true },
-  { name: "视频解析", url: "https://parse.shenzjd.com" },
-  { name: "热点聚合", url: "https://newshub.shenzjd.com" },
-  { name: "个人导航", url: "https://navhub.shenzjd.com" },
-  { name: "必应壁纸", url: "https://bing.shenzjd.com" },
-];
-
-// 社交链接
-const socialLinks = [
-  {
-    name: "Telegram",
-    url: "https://t.me/shenzjd_com",
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>`,
-  },
-  {
-    name: "GitHub",
-    url: "https://github.com/wu529778790",
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`,
-  },
-  {
-    name: "X",
-    url: "https://x.com/shenzujiudi",
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
-  },
-];
 const unlockSubmitting = ref(false);
 const pendingOnUnlock = ref<(() => void) | null>(null);
 
@@ -288,21 +233,24 @@ onMounted(() => {
   initDarkMode();
   loadSettings();
   auth.fetchStatus();
-  document.addEventListener("click", onDocumentClick);
   // 延迟 1 秒检测（等油猴脚本注入）
   setTimeout(checkCheckerTip, 1000);
+  // 初始化 AdSense 广告位（延迟推送，不阻塞首屏）
+  setTimeout(() => {
+    try {
+      const w = window as any;
+      w.adsbygoogle = w.adsbygoogle || [];
+      const slots = document.querySelectorAll(".adsbygoogle");
+      slots.forEach(() => w.adsbygoogle.push({}));
+    } catch (e) {
+      // 广告拦截或网络错误，忘记即可
+    }
+  }, 1500);
 });
 
 onBeforeUnmount(() => {
-  document.removeEventListener("click", onDocumentClick);
+  // 保留钩子占位，当前无需清理监听器
 });
-
-function onDocumentClick(e: MouseEvent) {
-  const target = e.target as HTMLElement;
-  if (showNavMenu.value && !target.closest(".nav-menu-btn") && !target.closest(".nav-dropdown")) {
-    showNavMenu.value = false;
-  }
-}
 </script>
 
 <style>
@@ -343,7 +291,7 @@ function onDocumentClick(e: MouseEvent) {
 .blob-1 {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  background: linear-gradient(135deg, #007aff, #5ac8fa);
   top: -100px;
   left: -100px;
   animation-delay: 0s;
@@ -352,7 +300,7 @@ function onDocumentClick(e: MouseEvent) {
 .blob-2 {
   width: 300px;
   height: 300px;
-  background: linear-gradient(135deg, #f59e0b, #fb7185);
+  background: linear-gradient(135deg, #ff9500, #ff375f);
   bottom: -50px;
   right: -50px;
   animation-delay: 2s;
@@ -361,28 +309,28 @@ function onDocumentClick(e: MouseEvent) {
 .blob-3 {
   width: 250px;
   height: 250px;
-  background: linear-gradient(135deg, #0ea5e9, #14b8a6);
+  background: linear-gradient(135deg, #5856d6, #64d2ff);
   top: 50%;
   left: 70%;
   animation-delay: 4s;
 }
 
-/* 顶部导航 - 玻璃拟态 */
+/* 顶部导航 - 玻璃拟态（Apple 风风格） */
 .header {
   background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-glass);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-bottom: 1px solid var(--border-light);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .nav {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -393,25 +341,33 @@ function onDocumentClick(e: MouseEvent) {
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
   color: var(--text-primary);
-  font-weight: 700;
-  font-size: 20px;
-  transition: transform var(--transition-fast);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  transition: opacity var(--transition-fast);
 }
 
 .brand:hover {
-  transform: scale(1.05);
+  opacity: 0.85;
 }
 
 .brand-icon {
-  font-size: 24px;
-  filter: drop-shadow(0 2px 4px rgba(15, 118, 110, 0.3));
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), #5856d6);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.28);
 }
 
 .brand-text {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: linear-gradient(135deg, var(--primary), #5856d6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -424,140 +380,36 @@ function onDocumentClick(e: MouseEvent) {
   gap: 8px;
 }
 
-/* 图标按钮 */
+/* 图标按钮 - iOS 风 */
 .btn-icon {
-  width: 40px;
-  height: 40px;
-  border: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
   background: var(--bg-btn);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-primary);
-  transition: background-color var(--transition-fast), color var(--transition-fast),
+  color: var(--text-secondary);
+  transition: background var(--transition-fast), color var(--transition-fast),
     transform var(--transition-fast), box-shadow var(--transition-fast);
   backdrop-filter: blur(10px);
-  border: 1px solid var(--border-glass);
 }
 
 .btn-icon:hover {
   background: var(--bg-btn-hover);
-  transform: translateY(-2px);
+  color: var(--text-primary);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
 .btn-icon:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
 }
 
 .btn-icon svg {
   stroke: currentColor;
-}
-
-/* GitHub 按钮特殊样式 — 已废弃，由 social-btn 替代 */
-
-/* 导航链接（桌面端） */
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-  justify-content: center;
-}
-
-.nav-link {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  transition: color var(--transition-fast), background var(--transition-fast);
-  white-space: nowrap;
-}
-
-.nav-link:hover {
-  color: var(--primary);
-  background: var(--bg-hover);
-}
-
-.nav-link.active {
-  color: var(--primary);
-  font-weight: 700;
-  background: rgba(15, 118, 110, 0.08);
-}
-
-/* 社交图标按钮 */
-.social-btn {
-  color: var(--text-secondary);
-}
-
-.social-btn:hover {
-  color: var(--primary);
-  background: var(--bg-btn-hover);
-}
-
-.social-btn svg {
-  stroke: none;
-  fill: currentColor;
-}
-
-/* 移动端菜单按钮（桌面隐藏） */
-.nav-menu-btn {
-  display: none;
-}
-
-/* 移动端下拉菜单 */
-.nav-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg-glass-strong);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-glass);
-  box-shadow: var(--shadow-lg);
-  padding: 12px 16px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  z-index: 99;
-}
-
-.nav-dropdown__link {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  transition: color var(--transition-fast), background var(--transition-fast);
-  width: calc(50% - 4px);
-}
-
-.nav-dropdown__link:hover {
-  color: var(--primary);
-  background: var(--bg-hover);
-}
-
-.nav-dropdown__link.active {
-  color: var(--primary);
-  font-weight: 700;
-  background: rgba(15, 118, 110, 0.08);
-}
-
-/* 下拉菜单动画 */
-.nav-menu-enter-active,
-.nav-menu-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.nav-menu-enter-from,
-.nav-menu-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
 }
 
 /* 主内容区 */
@@ -568,6 +420,24 @@ function onDocumentClick(e: MouseEvent) {
   margin: 0 auto;
   padding: 24px;
   animation: fadeIn 0.5s ease;
+}
+
+/* AdSense 广告位 - Apple 风卡片 */
+.ad-slot {
+  margin: 32px auto 8px;
+  padding: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  min-height: 100px;
+}
+
+.ad-slot .adsbygoogle {
+  display: block;
+  width: 100%;
+  min-height: 90px;
 }
 
 /* Toast 通知 */
@@ -614,15 +484,7 @@ function onDocumentClick(e: MouseEvent) {
 /* 移动端优化 */
 @media (max-width: 900px) {
   .nav {
-    padding: 12px 16px;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .nav-menu-btn {
-    display: flex;
+    padding: 10px 16px;
   }
 
   .nav-actions {
@@ -639,7 +501,12 @@ function onDocumentClick(e: MouseEvent) {
   }
 
   .brand {
-    font-size: 18px;
+    font-size: 17px;
+  }
+
+  .brand-icon {
+    width: 28px;
+    height: 28px;
   }
 
   .toast {
@@ -650,6 +517,12 @@ function onDocumentClick(e: MouseEvent) {
 
   .blob {
     filter: blur(40px);
+  }
+
+  .ad-slot {
+    margin: 24px auto 4px;
+    padding: 8px;
+    border-radius: var(--radius-md);
   }
 }
 

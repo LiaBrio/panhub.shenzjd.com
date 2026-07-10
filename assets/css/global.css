@@ -1,64 +1,64 @@
 /* 全局样式重置和现代化设计系统 */
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Syne:wght@600;700;800&display=swap");
-
 @layer base {
 :root {
-  --primary: #0f766e;
-  --primary-dark: #115e59;
-  --secondary: #f59e0b;
-  --success: #10b981;
-  --warning: #d97706;
-  --error: #ef4444;
+  --primary: #007aff;
+  --primary-dark: #0a63d1;
+  --secondary: #ff9f0a;
+  --success: #34c759;
+  --warning: #ff9500;
+  --error: #ff3b30;
 
-  --bg-primary: #fffdf8;
-  --bg-secondary: #f7f3ea;
-  --bg-glass: rgba(255, 253, 248, 0.86);
-  --bg-body: radial-gradient(circle at 12% -10%, #fff3d9 0%, transparent 42%),
-    radial-gradient(circle at 90% 8%, #d9f7f3 0%, transparent 35%),
-    #fffdf8;
-  --bg-glass-strong: rgba(255, 253, 248, 0.96);
-  --bg-surface: rgba(255, 255, 255, 0.72);
-  --bg-surface-elevated: rgba(255, 255, 255, 0.6);
-  --bg-surface-subtle: rgba(255, 255, 255, 0.3);
-  --bg-input: rgba(255, 255, 255, 0.5);
-  --bg-hover: rgba(15, 118, 110, 0.04);
-  --bg-active: rgba(15, 118, 110, 0.08);
-  --bg-skeleton: #f0f0f0;
-  --bg-skeleton-shine: rgba(255, 255, 255, 0.6);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f2f2f7;
+  --bg-glass: rgba(255, 255, 255, 0.72);
+  --bg-body: radial-gradient(circle at 12% -6%, rgba(0, 122, 255, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 90% 10%, rgba(88, 86, 214, 0.06) 0%, transparent 40%),
+    #f7f7fb;
+  --bg-glass-strong: rgba(255, 255, 255, 0.92);
+  --bg-surface: rgba(255, 255, 255, 0.78);
+  --bg-surface-elevated: rgba(255, 255, 255, 0.68);
+  --bg-surface-subtle: rgba(255, 255, 255, 0.5);
+  --bg-input: rgba(255, 255, 255, 0.65);
+  --bg-hover: rgba(0, 122, 255, 0.06);
+  --bg-active: rgba(0, 122, 255, 0.12);
+  --bg-skeleton: #eef0f4;
+  --bg-skeleton-shine: rgba(255, 255, 255, 0.7);
 
-  --text-primary: #1f2937;
+  --text-primary: #1d1d1f;
   --text-secondary: #4b5563;
-  --text-tertiary: #9ca3af;
+  --text-tertiary: #8e8e93;
   --text-on-primary: #ffffff;
   --text-on-warning: #ffffff;
   --text-on-success: #ffffff;
   --text-on-danger: #ffffff;
 
-  --border-light: #e5dfd0;
-  --border-medium: #d4c7ab;
-  --border-glass: rgba(255, 255, 255, 0.3);
-  --bg-btn: rgba(255, 255, 255, 0.5);
-  --bg-btn-hover: rgba(255, 255, 255, 0.8);
+  --border-light: rgba(60, 60, 67, 0.10);
+  --border-medium: rgba(60, 60, 67, 0.18);
+  --border-glass: rgba(255, 255, 255, 0.5);
+  --bg-btn: rgba(255, 255, 255, 0.65);
+  --bg-btn-hover: rgba(255, 255, 255, 0.9);
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 1px rgba(17, 24, 39, 0.03);
+  --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.06), 0 2px 4px rgba(17, 24, 39, 0.04);
+  --shadow-lg: 0 10px 30px rgba(17, 24, 39, 0.08), 0 4px 10px rgba(17, 24, 39, 0.04);
+  --shadow-xl: 0 24px 48px rgba(17, 24, 39, 0.12), 0 8px 16px rgba(17, 24, 39, 0.06);
 
-  --primary-glow: rgba(15, 118, 110, 0.3);
-  --warning-glow: rgba(245, 158, 11, 0.3);
-  --success-glow: rgba(16, 185, 129, 0.3);
-  --danger-glow: rgba(239, 68, 68, 0.3);
-  --accent-glow: rgba(245, 158, 11, 0.3);
+  --primary-glow: rgba(0, 122, 255, 0.28);
+  --warning-glow: rgba(255, 149, 0, 0.28);
+  --success-glow: rgba(52, 199, 89, 0.28);
+  --danger-glow: rgba(255, 59, 48, 0.28);
+  --accent-glow: rgba(255, 159, 10, 0.28);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
 
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow: 350ms ease;
+  --ease-apple: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --transition-fast: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 260ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 380ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 }
 
@@ -71,7 +71,11 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: "Manrope", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern", "liga", "clig";
+  letter-spacing: -0.01em;
   background: var(--bg-body);
   color: var(--text-primary);
   height: 100%;

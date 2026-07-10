@@ -133,22 +133,23 @@ function formatDate(d?: string) {
 </script>
 
 <style scoped>
-/* 结果卡片主体 - 玻璃拟态设计 */
+/* 结果卡片主体 - Apple 风卡片设计 */
 .result-card {
   background: var(--bg-surface);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
   border: 1px solid var(--border-light);
-  border-radius: 16px;
-  box-shadow: 0 8px 22px rgba(17, 24, 39, 0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 4px 16px rgba(17, 24, 39, 0.05);
   overflow: hidden;
   transition: box-shadow var(--transition-normal), transform var(--transition-normal),
     border-color var(--transition-normal);
 }
 
 .result-card:hover {
-  box-shadow: 0 14px 28px rgba(17, 24, 39, 0.1);
-  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(17, 24, 39, 0.06), 0 12px 32px rgba(17, 24, 39, 0.1);
+  transform: translateY(-2px);
+  border-color: var(--border-medium);
 }
 
 /* 卡片头部 */
@@ -163,28 +164,21 @@ function formatDate(d?: string) {
 }
 
 .card-header::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 16px;
-  right: 16px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--primary), transparent 70%);
-  opacity: 0.25;
+  content: none;
 }
 
 /* 平台徽章 */
 .platform-badge {
   width: 36px;
   height: 36px;
-  border-radius: 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 16px;
   font-weight: 700;
-  box-shadow: 0 5px 10px rgba(17, 24, 39, 0.2);
+  box-shadow: 0 4px 10px rgba(17, 24, 39, 0.14), inset 0 -1px 0 rgba(255, 255, 255, 0.18);
   flex-shrink: 0;
 }
 
@@ -223,21 +217,21 @@ function formatDate(d?: string) {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 10px;
-  background: transparent;
+  padding: 6px 12px;
+  background: var(--bg-btn);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
+  border-radius: 999px;
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+  transition: background var(--transition-fast), border-color var(--transition-fast),
     color var(--transition-fast), transform var(--transition-fast);
   white-space: nowrap;
 }
 
 .expand-btn:hover {
-  background: var(--bg-secondary);
+  background: var(--bg-btn-hover);
   border-color: var(--border-medium);
   color: var(--text-primary);
   transform: translateY(-1px);
@@ -372,14 +366,14 @@ function formatDate(d?: string) {
 }
 
 .meta-tag.date {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.15);
+  background: rgba(0, 122, 255, 0.08);
+  border-color: rgba(0, 122, 255, 0.18);
   color: var(--primary);
 }
 
 .meta-tag.password {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.2);
+  background: rgba(52, 199, 89, 0.1);
+  border-color: rgba(52, 199, 89, 0.22);
   color: var(--success);
 }
 
@@ -388,29 +382,29 @@ function formatDate(d?: string) {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 10px;
-  background: transparent;
+  padding: 6px 12px;
+  background: var(--bg-btn);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
+  border-radius: 999px;
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+  transition: background var(--transition-fast), border-color var(--transition-fast),
     color var(--transition-fast), transform var(--transition-fast);
   white-space: nowrap;
 }
 
 .copy-btn:hover {
-  background: var(--bg-secondary);
+  background: var(--bg-btn-hover);
   border-color: var(--border-medium);
   color: var(--text-primary);
   transform: translateY(-1px);
 }
 
 .copy-btn:active {
-  transform: translateY(0);
-  background: var(--border-light);
+  transform: translateY(0) scale(0.97);
+  background: var(--bg-active);
 }
 
 .copy-btn svg {
@@ -434,25 +428,27 @@ function formatDate(d?: string) {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, var(--primary), #14b8a6);
-  color: white;
+  padding: 9px 18px;
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  color: #fff;
   border: none;
-  border-radius: var(--radius-md);
-  font-size: 14px;
+  border-radius: 999px;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   cursor: pointer;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+  box-shadow: 0 4px 12px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .load-more-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(15, 118, 110, 0.4);
+  box-shadow: 0 8px 20px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  filter: brightness(1.05);
 }
 
 .load-more-btn:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
 }
 
 .load-more-btn svg {
