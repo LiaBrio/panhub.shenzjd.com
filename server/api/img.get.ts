@@ -3,12 +3,17 @@ import { ofetch } from "ofetch";
 
 const ALLOWED_HOSTS = /^img[1-9]\.doubanio\.com$/;
 
+const CACHE_CONTROL =
+  "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
+const CDN_CACHE_CONTROL = "public, s-maxage=604800";
+
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const raw = (query.url as string) || "";
   const url = decodeURIComponent(raw);
 
   if (!url || !url.startsWith("https://")) {
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({ statusCode: 400, statusMessage: "Invalid url" });
   }
 
@@ -16,15 +21,18 @@ export default defineEventHandler(async (event) => {
   try {
     parsed = new URL(url);
   } catch {
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({ statusCode: 400, statusMessage: "Invalid url" });
   }
 
   if (!ALLOWED_HOSTS.test(parsed.hostname)) {
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({ statusCode: 403, statusMessage: "Host not allowed" });
   }
 
   // 防止 SSRF 绕过：URL 中不得包含用户信息段或非标准端口
   if (parsed.username || parsed.password || parsed.port) {
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({ statusCode: 403, statusMessage: "Host not allowed" });
   }
 
@@ -42,13 +50,20 @@ export default defineEventHandler(async (event) => {
     });
 
     const buffer = Buffer.from(resp);
-    setHeader(event, "Cache-Control", "public, max-age=86400");
-    setHeader(event, "X-Content-Type-Options", "nosniff");
     const ext = parsed.pathname.split(".").pop()?.toLowerCase() || "jpg";
-    const mime = ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
+    const mime =
+      ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
+
     setHeader(event, "Content-Type", mime);
+    setHeader(event, "Content-Length", buffer.byteLength);
+    setHeader(event, "Cache-Control", CACHE_CONTROL);
+    setHeader(event, "CDN-Cache-Control", CDN_CACHE_CONTROL);
+    setHeader(event, "Vary", "Accept");
+    setHeader(event, "X-Content-Type-Options", "nosniff");
     return buffer;
   } catch (error: any) {
+    // 失败响应禁止被边缘/浏览器缓存，避免错误结果污染长效缓存
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({
       statusCode: 503,
       statusMessage: "Image fetch timeout",

@@ -32,7 +32,19 @@ export default defineNuxtConfig({
         { property: "og:type", content: "website" },
         { property: "og:site_name", content: "PanHub" },
       ],
-      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        // 豆瓣图源预连接：加速国内直连命中 doubanio CDN
+        { rel: "preconnect", href: "https://img9.doubanio.com", crossorigin: "" },
+        { rel: "preconnect", href: "https://img1.doubanio.com", crossorigin: "" },
+        { rel: "dns-prefetch", href: "https://img2.doubanio.com" },
+        { rel: "dns-prefetch", href: "https://img3.doubanio.com" },
+        { rel: "dns-prefetch", href: "https://img4.doubanio.com" },
+        { rel: "dns-prefetch", href: "https://img5.doubanio.com" },
+        { rel: "dns-prefetch", href: "https://img6.doubanio.com" },
+        { rel: "dns-prefetch", href: "https://img7.doubanio.com" },
+        { rel: "dns-prefetch", href: "https://img8.doubanio.com" },
+      ],
     },
   },
   nitro: {
@@ -56,8 +68,14 @@ export default defineNuxtConfig({
     "/api/auth/**": { swr: false, cache: false },
     // 搜索接口依赖 Cookie 鉴权，禁止缓存避免 401 被缓存
     "/api/search": { swr: false, cache: false },
-    // 图片代理依赖豆瓣，禁止 SWR 缓存避免错误响应被缓存
-    "/api/img": { swr: false, cache: false },
+    // 图片代理：允许边缘 SWR 缓存，长效命中；错误响应由接口内 no-store 覆盖
+    "/api/img": {
+      swr: 86400,
+      headers: {
+        "cache-control":
+          "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
+      },
+    },
     "/**": { swr: 3600 },
   },
   runtimeConfig: {
@@ -74,6 +92,8 @@ export default defineNuxtConfig({
       siteUrl: "https://panhub.shenzjd.com",
       // 向前端暴露默认频道清单
       tgDefaultChannels: channelsConfig.defaultChannels,
+      // 可选图片镜像前缀（如 https://wsrv.nl/?url= ），空字符串则跳过镜像 fallback
+      imageMirror: process.env.NUXT_PUBLIC_IMAGE_MIRROR || "",
     },
   },
 });

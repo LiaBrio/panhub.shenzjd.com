@@ -60,12 +60,13 @@
             >
               <div class="card-cover">
                 <img
-                  v-if="item.cover && !imgFailed.includes(item.id ?? 0)"
-                  :src="proxyCover(item.cover)"
+                  v-if="item.cover && !imgFailed.includes(coverKey(item))"
+                  :src="coverSrc(item)"
                   :alt="extractTerm(item.title)"
                   loading="lazy"
+                  decoding="async"
                   referrerpolicy="no-referrer"
-                  @error="onImgError(item.id ?? 0)"
+                  @error="onImgError(item)"
                 />
                 <div v-else class="cover-placeholder">🎬</div>
               </div>
@@ -127,11 +128,17 @@ interface DoubanHotItem {
 
 const props = defineProps<Props>();
 
+const runtimeConfig = useRuntimeConfig();
+// 可选公共图片镜像前缀（如 https://wsrv.nl/?url= ）；为空则跳过该 fallback 层
+const imageMirror = (runtimeConfig.public.imageMirror as string) || "";
+
 const loading = ref(false);
 const loadingMore = ref(false);
 const items = ref<DoubanHotItem[]>([]);
 const hasMore = ref(true);
-const imgFailed = ref<number[]>([]);
+const imgFailed = ref<(string | number)[]>([]);
+// 每张封面的当前 fallback 步数：0=直连, 1=镜像, 2=/api/img, 3=最终失败
+const imgStep = ref<Record<string, number>>({});
 const selectedCategoryId = ref<string>("douban-top250");
 const currentPage = ref(1);
 const loadObserver = ref<IntersectionObserver | null>(null);
@@ -163,19 +170,54 @@ const hasAnyData = computed(() => {
   return items.value.length > 0 || loading.value;
 });
 
-function onImgError(id: number) {
-  if (!imgFailed.value.includes(id)) {
-    imgFailed.value = [...imgFailed.value, id];
+function coverKey(item: DoubanHotItem): string {
+  return String(item.id ?? item.cover ?? item.title);
+}
+
+/**
+ * 根据当前 fallback 步数解析封面 URL：
+ *   step 0 → 直连 doubanio（命中国内 CDN，最快）
+ *   step 1 → 公共镜像（若配置了 imageMirror）
+ *   step 2 → 服务端 /api/img 代理（避开被屏蔽豆瓣的网络环境）
+ */
+function coverSrc(item: DoubanHotItem): string {
+  const url = item.cover;
+  if (!url) return "";
+  const key = coverKey(item);
+  let step = imgStep.value[key] ?? 0;
+
+  // 若未配置 imageMirror，跳过 step=1
+  if (step === 1 && !imageMirror) {
+    step = 2;
   }
+
+  if (step >= 2) {
+    return `/api/img?url=${encodeURIComponent(url)}`;
+  }
+  if (step === 1) {
+    return `${imageMirror}${encodeURIComponent(url)}`;
+  }
+  return url;
+}
+
+function onImgError(item: DoubanHotItem) {
+  const key = coverKey(item);
+  const current = imgStep.value[key] ?? 0;
+  let next = current + 1;
+  // 跳过未配置的镜像步骤
+  if (next === 1 && !imageMirror) next = 2;
+
+  if (next >= 3) {
+    if (!imgFailed.value.includes(key)) {
+      imgFailed.value = [...imgFailed.value, key];
+    }
+    return;
+  }
+  imgStep.value = { ...imgStep.value, [key]: next };
 }
 
 function extractTerm(title: string): string {
   return title.replace(/^【[\d.]+】/, "").replace(/^#\d+\s*/, "").trim() || title;
-}
-
-function proxyCover(url: string): string {
-  if (!url) return "";
-  return `/api/img?url=${encodeURIComponent(url)}`;
 }
 
 async function fetchCategoryData(categoryId: string, page: number, append = false) {
@@ -228,6 +270,8 @@ async function selectCategory(categoryId: string) {
   currentPage.value = 1;
   hasMore.value = true;
   items.value = []; // 立即清空当前内容
+  imgFailed.value = []; // 重置封面失败列表，允许新分类重新尝试直连
+  imgStep.value = {};
   loading.value = true; // 立即显示骨架屏
 
   // 开始获取新数据

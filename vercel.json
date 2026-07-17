@@ -1,7 +1,63 @@
 {
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/img",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "public, s-maxage=604800"
+        }
+      ]
+    },
+    {
+      "source": "/api/douban-hot",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=1800, stale-while-revalidate=3600"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "public, s-maxage=1800"
+        }
+      ]
+    },
+    {
+      "source": "/api/auth/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/api/search",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/api/hot-searches",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/api/hot-search-stats",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/api/health",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/api/plugin-health",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
