@@ -1,58 +1,62 @@
 /* 全局样式重置和现代化设计系统 */
 @layer base {
 :root {
-  --primary: #007aff;
-  --primary-dark: #0a63d1;
-  --secondary: #ff9f0a;
-  --success: #34c759;
-  --warning: #ff9500;
-  --error: #ff3b30;
+  --primary: #b44935;
+  --primary-dark: #853525;
+  --secondary: #b88a52;
+  --accent-editorial: #b44935;
+  --success: #4f7456;
+  --warning: #b87832;
+  --error: #a53e35;
 
-  --bg-primary: #ffffff;
-  --bg-secondary: #f2f2f7;
-  --bg-glass: rgba(255, 255, 255, 0.72);
-  --bg-body: radial-gradient(circle at 12% -6%, rgba(0, 122, 255, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 90% 10%, rgba(88, 86, 214, 0.06) 0%, transparent 40%),
-    #f7f7fb;
-  --bg-glass-strong: rgba(255, 255, 255, 0.92);
-  --bg-surface: rgba(255, 255, 255, 0.78);
-  --bg-surface-elevated: rgba(255, 255, 255, 0.68);
-  --bg-surface-subtle: rgba(255, 255, 255, 0.5);
-  --bg-input: rgba(255, 255, 255, 0.65);
-  --bg-hover: rgba(0, 122, 255, 0.06);
-  --bg-active: rgba(0, 122, 255, 0.12);
-  --bg-skeleton: #eef0f4;
-  --bg-skeleton-shine: rgba(255, 255, 255, 0.7);
+  --bg-primary: #fbf7ef;
+  --bg-secondary: #f1e8da;
+  --bg-paper: #fffaf2;
+  --bg-glass: rgba(251, 247, 239, 0.88);
+  --bg-body: radial-gradient(circle at 8% 0%, rgba(180, 73, 53, 0.07) 0%, transparent 34%),
+    radial-gradient(circle at 92% 4%, rgba(184, 138, 82, 0.09) 0%, transparent 32%),
+    #f4ecdf;
+  --bg-glass-strong: rgba(255, 250, 242, 0.96);
+  --bg-surface: rgba(255, 250, 242, 0.9);
+  --bg-surface-elevated: rgba(246, 238, 225, 0.92);
+  --bg-surface-subtle: rgba(241, 232, 218, 0.64);
+  --bg-input: rgba(255, 252, 247, 0.94);
+  --bg-hover: rgba(180, 73, 53, 0.06);
+  --bg-active: rgba(180, 73, 53, 0.12);
+  --bg-skeleton: #e8dece;
+  --bg-skeleton-shine: rgba(255, 255, 255, 0.64);
 
-  --text-primary: #1d1d1f;
-  --text-secondary: #4b5563;
-  --text-tertiary: #8e8e93;
-  --text-on-primary: #ffffff;
-  --text-on-warning: #ffffff;
-  --text-on-success: #ffffff;
-  --text-on-danger: #ffffff;
+  --text-primary: #2c251f;
+  --text-secondary: #6f6255;
+  --text-tertiary: #988a7b;
+  --text-on-primary: #fffaf2;
+  --text-on-warning: #fffaf2;
+  --text-on-success: #fffaf2;
+  --text-on-danger: #fffaf2;
 
-  --border-light: rgba(60, 60, 67, 0.10);
-  --border-medium: rgba(60, 60, 67, 0.18);
-  --border-glass: rgba(255, 255, 255, 0.5);
-  --bg-btn: rgba(255, 255, 255, 0.65);
-  --bg-btn-hover: rgba(255, 255, 255, 0.9);
+  --border-light: rgba(91, 72, 52, 0.13);
+  --border-medium: rgba(91, 72, 52, 0.24);
+  --border-glass: rgba(255, 255, 255, 0.55);
+  --bg-btn: rgba(255, 250, 242, 0.78);
+  --bg-btn-hover: #fffdf8;
 
-  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 1px rgba(17, 24, 39, 0.03);
-  --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.06), 0 2px 4px rgba(17, 24, 39, 0.04);
-  --shadow-lg: 0 10px 30px rgba(17, 24, 39, 0.08), 0 4px 10px rgba(17, 24, 39, 0.04);
-  --shadow-xl: 0 24px 48px rgba(17, 24, 39, 0.12), 0 8px 16px rgba(17, 24, 39, 0.06);
+  --shadow-sm: 0 1px 2px rgba(71, 55, 36, 0.05);
+  --shadow-md: 0 6px 18px rgba(71, 55, 36, 0.08);
+  --shadow-lg: 0 14px 34px rgba(71, 55, 36, 0.1);
+  --shadow-xl: 0 28px 58px rgba(71, 55, 36, 0.14);
 
-  --primary-glow: rgba(0, 122, 255, 0.28);
-  --warning-glow: rgba(255, 149, 0, 0.28);
-  --success-glow: rgba(52, 199, 89, 0.28);
-  --danger-glow: rgba(255, 59, 48, 0.28);
-  --accent-glow: rgba(255, 159, 10, 0.28);
+  --primary-glow: rgba(180, 73, 53, 0.24);
+  --warning-glow: rgba(184, 120, 50, 0.24);
+  --success-glow: rgba(79, 116, 86, 0.24);
+  --danger-glow: rgba(165, 62, 53, 0.24);
+  --accent-glow: rgba(184, 138, 82, 0.24);
 
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --radius-xl: 22px;
+  --font-display: Georgia, "Times New Roman", "Songti SC", "STSong", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
 
   --ease-apple: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
@@ -71,7 +75,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "kern", "liga", "clig";

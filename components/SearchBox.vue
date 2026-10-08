@@ -190,18 +190,17 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
-/* 搜索框主体 - 玻璃拟态设计 */
+/* 搜索框主体 - 编辑式检索栏 */
 .search-box {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  background: var(--bg-glass);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  min-height: 62px;
+  padding: 8px 9px 8px 20px;
+  background: var(--bg-input);
   border: 1px solid var(--border-medium);
-  border-radius: 18px;
-  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 28px rgba(71, 55, 36, 0.09);
   transition: border-color var(--transition-normal), box-shadow var(--transition-normal),
     transform var(--transition-normal);
   position: relative;
@@ -209,8 +208,8 @@ onBeforeUnmount(() => {
 
 .search-box.focused {
   border-color: var(--primary);
-  box-shadow: 0 10px 26px rgba(15, 118, 110, 0.14);
-  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(107, 58, 39, 0.13);
+  transform: translateY(-1px);
 }
 
 .search-box.loading {
@@ -219,8 +218,8 @@ onBeforeUnmount(() => {
 }
 
 @keyframes searchPulse {
-  0%, 100% { box-shadow: 0 8px 32px rgba(15, 118, 110, 0.22); }
-  50% { box-shadow: 0 8px 40px rgba(15, 118, 110, 0.34); }
+  0%, 100% { box-shadow: 0 10px 26px rgba(180, 73, 53, 0.14); }
+  50% { box-shadow: 0 14px 34px rgba(180, 73, 53, 0.22); }
 }
 
 /* 搜索图标 */
@@ -303,16 +302,20 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
-/* 主要按钮 - 渐变背景 */
+/* 主要按钮 - 纸刊印刷红 */
 .action-btn.primary {
-  background: linear-gradient(135deg, var(--primary), #14b8a6);
-  color: white;
-  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+  min-height: 44px;
+  padding-inline: 18px;
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-radius: 2px;
+  box-shadow: none;
 }
 
 .action-btn.primary:hover:not(:disabled) {
+  background: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.36);
+  box-shadow: 0 7px 16px var(--primary-glow);
 }
 
 .action-btn.primary:active:not(:disabled) {
@@ -430,7 +433,8 @@ onBeforeUnmount(() => {
 /* 移动端优化 */
 @media (max-width: 640px) {
   .search-box {
-    padding: 10px 12px;
+    min-height: 54px;
+    padding: 5px 5px 5px 12px;
     gap: 8px;
   }
 

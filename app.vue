@@ -17,7 +17,10 @@
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </span>
-          <span class="brand-text">PanHub</span>
+          <span class="brand-copy">
+            <span class="brand-text">PANHUB</span>
+            <span class="brand-edition">RESOURCE JOURNAL</span>
+          </span>
         </NuxtLink>
 
         <div class="nav-actions">
@@ -283,54 +286,53 @@ onBeforeUnmount(() => {
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(48px);
-  opacity: 0.28;
-  animation: blobFloat 8s ease-in-out infinite;
+  filter: blur(80px);
+  opacity: 0.12;
+  animation: blobFloat 14s ease-in-out infinite;
 }
 
 .blob-1 {
-  width: 400px;
-  height: 400px;
-  background: linear-gradient(135deg, #007aff, #5ac8fa);
-  top: -100px;
-  left: -100px;
+  width: 420px;
+  height: 420px;
+  background: #b44935;
+  top: -180px;
+  left: -130px;
   animation-delay: 0s;
 }
 
 .blob-2 {
-  width: 300px;
-  height: 300px;
-  background: linear-gradient(135deg, #ff9500, #ff375f);
-  bottom: -50px;
-  right: -50px;
-  animation-delay: 2s;
+  width: 360px;
+  height: 360px;
+  background: #b88a52;
+  bottom: -180px;
+  right: -120px;
+  animation-delay: 3s;
 }
 
 .blob-3 {
-  width: 250px;
-  height: 250px;
-  background: linear-gradient(135deg, #5856d6, #64d2ff);
-  top: 50%;
-  left: 70%;
-  animation-delay: 4s;
+  width: 260px;
+  height: 260px;
+  background: #78634c;
+  top: 42%;
+  left: 68%;
+  animation-delay: 6s;
 }
 
-/* 顶部导航 - 玻璃拟态（Apple 风风格） */
+/* 顶部导航 - 编辑式刊头 */
 .header {
   background: var(--bg-glass);
-  backdrop-filter: saturate(180%) blur(24px);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  backdrop-filter: saturate(120%) blur(18px);
+  -webkit-backdrop-filter: saturate(120%) blur(18px);
   border-bottom: 1px solid var(--border-light);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .nav {
-  max-width: 1100px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: 13px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -341,36 +343,48 @@ onBeforeUnmount(() => {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   text-decoration: none;
   color: var(--text-primary);
-  font-weight: 600;
-  font-size: 19px;
-  letter-spacing: -0.02em;
   transition: opacity var(--transition-fast);
 }
 
 .brand:hover {
-  opacity: 0.85;
+  opacity: 0.78;
 }
 
 .brand-icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--primary), #5856d6);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.28);
+  border: 1px solid var(--text-primary);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .brand-text {
-  background: linear-gradient(135deg, var(--primary), #5856d6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.brand-edition {
+  color: var(--text-tertiary);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
 }
 
 /* 导航操作区 */
@@ -387,7 +401,7 @@ onBeforeUnmount(() => {
   padding: 0;
   background: var(--bg-btn);
   border: 1px solid var(--border-light);
-  border-radius: 12px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -416,9 +430,9 @@ onBeforeUnmount(() => {
 .main {
   flex: 1;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 34px 28px 48px;
   animation: fadeIn 0.5s ease;
 }
 

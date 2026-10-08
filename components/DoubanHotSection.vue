@@ -51,7 +51,7 @@
             class="grid-container"
           >
             <button
-              v-for="item in items"
+              v-for="(item, index) in items"
               :key="item.id || item.title"
               class="movie-card"
               data-theme-part="movie-card"
@@ -59,6 +59,7 @@
               @click="onItemClick(item.title)"
             >
               <div class="card-cover">
+                <span class="card-rank" aria-hidden="true">{{ String(index + 1).padStart(2, "0") }}</span>
                 <img
                   v-if="item.cover && !imgFailed.includes(coverKey(item))"
                   :src="coverSrc(item)"
@@ -372,53 +373,48 @@ defineExpose({ init, refresh });
 /* 分类导航 */
 .category-nav {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
-  padding: 8px 0;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 0 0 10px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border-light);
+  scrollbar-width: none;
+}
+
+.category-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .tab-button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary, #6b7280);
-  background: var(--bg-surface);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
+  flex: 0 0 auto;
+  min-height: 32px;
+  padding: 4px 0;
+  color: var(--text-tertiary, #988a7b);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
-.tab-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(15, 118, 110, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.tab-button:hover::before {
-  opacity: 1;
+.tab-button:hover {
+  color: var(--text-primary);
 }
 
 .tab-button:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
 }
 
 .tab-button.is-active {
-  color: var(--primary, #0f766e);
-  background: rgba(15, 118, 110, 0.08);
-  border-color: var(--primary, #0f766e);
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.15);
+  color: var(--primary);
+  background: transparent;
+  border-color: var(--primary);
+  font-weight: 750;
+  box-shadow: none;
 }
 
 .tab-label {
@@ -528,39 +524,67 @@ defineExpose({ init, refresh });
   }
 }
 
-/* 网格容器 */
+/* 不对称海报画廊 */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
+  align-items: stretch;
 }
 
 .movie-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background: var(--bg-surface);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 12px;
+  min-width: 0;
+  background: var(--bg-paper);
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
   text-align: left;
   padding: 0;
   will-change: transform;
 }
 
+.movie-card:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
 .movie-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.12);
+  transform: translateY(-3px);
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-lg);
 }
 
 .card-cover {
   aspect-ratio: 2 / 3;
-  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, #d8cbbb 100%);
   overflow: hidden;
   position: relative;
+}
+
+.movie-card:first-child .card-cover {
+  height: 100%;
+  min-height: 460px;
+  aspect-ratio: auto;
+}
+
+.card-rank {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  padding: 5px 7px;
+  background: rgba(30, 23, 18, 0.78);
+  color: #fffaf2;
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.04em;
 }
 
 .card-cover img {
@@ -586,11 +610,31 @@ defineExpose({ init, refresh });
 }
 
 .card-info {
-  padding: 10px 12px;
+  padding: 11px 12px 13px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   min-height: 0;
+}
+
+.movie-card:first-child .card-info {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 0;
+  padding: 70px 20px 20px;
+  background: linear-gradient(transparent, rgba(28, 20, 15, 0.9));
+}
+
+.movie-card:first-child .card-title {
+  color: #fffaf2;
+  font-family: var(--font-display);
+  font-size: 21px;
+  line-height: 1.2;
+}
+
+.movie-card:first-child .card-desc {
+  color: rgba(255, 250, 242, 0.72);
+  font-size: 12px;
 }
 
 .card-title {
@@ -723,20 +767,41 @@ defineExpose({ init, refresh });
 }
 
 /* 响应式 */
+@media (max-width: 900px) {
+  .skeleton-grid,
+  .grid-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 640px) {
   .category-nav {
-    gap: 6px;
+    gap: 16px;
   }
 
   .tab-button {
-    padding: 6px 10px;
+    min-height: 40px;
     font-size: 12px;
   }
 
   .skeleton-grid,
   .grid-container {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .movie-card:first-child {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+
+  .movie-card:first-child .card-cover {
+    min-height: 290px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .movie-card:first-child .card-title {
+    font-size: 19px;
   }
 
   .card-title {

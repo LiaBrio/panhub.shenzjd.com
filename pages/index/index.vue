@@ -1,45 +1,53 @@
 <template>
-  <div class="home">
-    <!-- 英雄区域 + 热门搜索 -->
-    <div class="hero-row">
-      <div class="hero-noise" aria-hidden="true" />
-      <header class="hero">
-        <div class="hero-accent" aria-hidden="true" />
-        <div class="hero-content">
-          <div class="hero-badge">PanHub 搜索聚合引擎</div>
-          <h1 class="hero-title">
-            <span class="hero-title-line">一键检索</span>
-            <span class="hero-title-line hero-title-line--accent">全网网盘资源</span>
-          </h1>
-          <p class="hero-description">
-            聚合阿里云盘、夸克、百度网盘、115、迅雷等平台 · 快速、直达、少打扰
-          </p>
-          <ul class="hero-features" role="list">
-            <li class="hero-feature">实时聚合</li>
-            <li class="hero-feature">多平台覆盖</li>
-            <li class="hero-feature">结果去重</li>
-          </ul>
-        </div>
-        <div class="hero-shape" aria-hidden="true" />
-      </header>
-      <aside class="hero-aside">
-        <ErrorBoundary message="热搜加载失败">
-          <HotSearchSection ref="hotSearchRef" :on-search="quickSearch" />
-        </ErrorBoundary>
-      </aside>
-    </div>
+  <div class="home" :class="{ 'home--searched': searched }">
+    <!-- 编辑式首屏：搜索始终是第一任务 -->
+    <section v-if="!searched" class="editorial-hero" aria-labelledby="archive-title">
+      <div class="hero-rule" aria-hidden="true">
+        <span>VOL. 09</span>
+        <span>CURATED DAILY</span>
+      </div>
+      <div class="hero-content">
+        <p class="archive-kicker">PANHUB EDITORIAL LIBRARY</p>
+        <h1 id="archive-title" class="hero-title">光影收藏室</h1>
+        <p class="hero-description">
+          从正在热映到经典高分，在内容与资源之间自由探索
+        </p>
+      </div>
+      <SearchBox
+        v-model="kw"
+        :loading="searchState.loading"
+        :paused="searchState.paused"
+        :searched="searched"
+        :placeholder="placeholder"
+        @search="onSearch"
+        @reset="fullReset"
+        @pause="pauseSearch"
+        @continue="handleContinueSearch" />
+      <div class="hero-shortcuts" aria-label="热门分类">
+        <button type="button" @click="quickSearch('正在热映')">正在热映</button>
+        <button type="button" @click="quickSearch('豆瓣高分')">豆瓣高分</button>
+        <button type="button" @click="quickSearch('热门剧集')">热门剧集</button>
+        <button type="button" @click="quickSearch('高分纪录片')">高分纪录片</button>
+      </div>
+    </section>
 
-    <!-- 搜索框 -->
-    <SearchBox
-      v-model="kw"
-      :loading="searchState.loading"
-      :paused="searchState.paused"
-      :searched="searched"
-      :placeholder="placeholder"
-      @search="onSearch"
-      @reset="fullReset"
-      @pause="pauseSearch"
-      @continue="handleContinueSearch" />
+    <!-- 搜索后收起发现内容，保持紧凑搜索入口 -->
+    <section v-else class="results-search" aria-label="搜索工具">
+      <div>
+        <p class="archive-kicker">SEARCH RESULTS</p>
+        <h1 class="results-title">资源检索</h1>
+      </div>
+      <SearchBox
+        v-model="kw"
+        :loading="searchState.loading"
+        :paused="searchState.paused"
+        :searched="searched"
+        :placeholder="placeholder"
+        @search="onSearch"
+        @reset="fullReset"
+        @pause="pauseSearch"
+        @continue="handleContinueSearch" />
+    </section>
 
     <!-- 统计和过滤器 -->
     <div v-if="searched" class="stats-bar">
@@ -135,12 +143,32 @@
       <span>{{ searchState.error }}</span>
     </section>
 
-    <!-- 豆瓣电影新片榜 - 搜索时隐藏 -->
-    <section v-if="!searched" class="douban-hot-section">
-      <ErrorBoundary message="豆瓣热榜加载失败">
-        <DoubanHotSection ref="doubanHotRef" :on-search="quickSearch" />
-      </ErrorBoundary>
-    </section>
+    <!-- 编辑式发现区 - 搜索时隐藏 -->
+    <div v-if="!searched" class="discovery-grid">
+      <section class="douban-hot-section" aria-labelledby="douban-heading">
+        <header class="section-heading">
+          <div>
+            <p class="section-kicker">THE SCREENING ROOM</p>
+            <h2 id="douban-heading">豆瓣高分精选</h2>
+          </div>
+          <span>点击海报直接搜索资源</span>
+        </header>
+        <ErrorBoundary message="豆瓣热榜加载失败">
+          <DoubanHotSection ref="doubanHotRef" :on-search="quickSearch" />
+        </ErrorBoundary>
+      </section>
+      <aside class="trending-section" aria-labelledby="trending-heading">
+        <header class="section-heading section-heading--compact">
+          <div>
+            <p class="section-kicker">TRENDING NOW</p>
+            <h2 id="trending-heading">大家正在找</h2>
+          </div>
+        </header>
+        <ErrorBoundary message="热搜加载失败">
+          <HotSearchSection ref="hotSearchRef" :on-search="quickSearch" />
+        </ErrorBoundary>
+      </aside>
+    </div>
   </div>
 </template>
 
@@ -254,7 +282,6 @@ const {
 } = useSearch();
 const { settings, loadSettings } = useSettings();
 const auth = useAuth();
-const { checkSearchAuth } = useWxAuth();
 const requestUnlock = inject<(onSuccess?: () => void) => void>("requestUnlock");
 
 // 获取搜索选项（使用最新的用户设置）
@@ -303,8 +330,6 @@ async function onSearch() {
     requestUnlock(doSearch);
     return;
   }
-  // 微信公众号认证（前3次免费，之后弹窗，不阻塞搜索）
-  checkSearchAuth();
   await doSearch();
 }
 
@@ -428,195 +453,186 @@ function visibleSorted(items: any[]) {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 }
 
-/* 英雄区域 + 热门搜索（frontend-design: editorial + industrial） */
-.hero-row {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
+.home--searched {
+  gap: 20px;
+}
+
+/* B3 Editorial Library 首屏 */
+.editorial-hero {
   position: relative;
-  background: linear-gradient(145deg, rgba(15, 118, 110, 0.12) 0%, rgba(15, 118, 110, 0.04) 35%, rgba(245, 158, 11, 0.06) 70%, rgba(15, 118, 110, 0.08) 100%);
-  border-radius: 20px;
-  box-shadow: 0 4px 20px -4px rgba(15, 118, 110, 0.15);
+  padding: 20px 48px 30px;
+  background: var(--bg-paper);
+  border: 1px solid var(--border-medium);
+  box-shadow: var(--shadow-md);
+  text-align: center;
   overflow: hidden;
 }
 
-.hero-noise {
+.editorial-hero::before {
+  content: "";
   position: absolute;
-  inset: 0;
+  inset: 8px;
+  border: 1px solid var(--border-light);
   pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
-  z-index: 0;
 }
 
-.hero {
-  flex: 1;
-  min-width: 0;
-  padding: 24px 28px;
-  text-align: left;
+.hero-rule {
   position: relative;
   z-index: 1;
-}
-
-.hero-accent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 6px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 50%, var(--primary) 100%);
-  opacity: 1;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-medium);
+  color: var(--text-tertiary);
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.18em;
 }
 
 .hero-content {
   position: relative;
-  z-index: 2;
-  padding-left: 12px;
+  z-index: 1;
+  padding: 30px 0 18px;
 }
 
-.hero-badge {
-  display: inline-block;
-  font-size: 11px;
+.archive-kicker,
+.section-kicker {
+  margin: 0 0 10px;
+  color: var(--accent-editorial);
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--primary);
-  margin-bottom: 10px;
-  padding: 6px 12px;
-  background: rgba(15, 118, 110, 0.12);
-  border: 1px solid rgba(15, 118, 110, 0.25);
-  border-radius: 8px;
-  font-family: "Manrope", sans-serif;
-  animation: heroReveal 0.6s ease-out both;
-  animation-delay: 0.05s;
+  letter-spacing: 0.18em;
+}
+
+.hero-title,
+.results-title,
+.section-heading h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
 }
 
 .hero-title {
-  font-family: "Syne", "Manrope", sans-serif;
-  font-size: 36px;
-  font-weight: 800;
-  margin: 0 0 10px;
+  margin: 0;
   color: var(--text-primary);
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  max-width: 560px;
-  animation: heroReveal 0.6s ease-out both;
-  animation-delay: 0.12s;
-}
-
-.hero-title-line {
-  display: block;
-}
-
-.hero-title-line--accent {
-  background: linear-gradient(120deg, var(--primary) 0%, #0d9488 40%, var(--secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(44px, 7vw, 76px);
+  line-height: 1;
 }
 
 .hero-description {
-  font-size: 14px;
+  margin: 14px auto 0;
   color: var(--text-secondary);
-  margin: 0 0 16px;
-  line-height: 1.65;
-  max-width: 520px;
-  animation: heroReveal 0.6s ease-out both;
-  animation-delay: 0.2s;
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-.hero-features {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.editorial-hero :deep(.search) {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.hero-shortcuts {
+  position: relative;
+  z-index: 2;
   display: flex;
+  justify-content: center;
+  gap: 8px 22px;
   flex-wrap: wrap;
-  gap: 12px 20px;
+  margin-top: 17px;
 }
 
-.hero-feature {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--primary-dark);
-  padding: 6px 12px;
-  background: var(--bg-input);
-  border: 1px solid rgba(15, 118, 110, 0.2);
-  border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  animation: heroReveal 0.6s ease-out both;
-}
-
-.hero-feature:nth-child(1) { animation-delay: 0.28s; }
-.hero-feature:nth-child(2) { animation-delay: 0.34s; }
-.hero-feature:nth-child(3) { animation-delay: 0.4s; }
-
-.hero-feature:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.15);
-  border-color: rgba(15, 118, 110, 0.35);
-}
-
-.hero-shape {
-  position: absolute;
-  right: 8%;
-  bottom: 10%;
-  width: 120px;
-  height: 120px;
-  background: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  filter: blur(24px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-@keyframes heroReveal {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero-aside {
-  flex-shrink: 0;
-  width: 340px;
-}
-
-/* 嵌入时去除热门搜索的独立卡片感 */
-.hero-aside :deep(.tag-cloud-wrap),
-.hero-aside :deep(.loading-state),
-.hero-aside :deep(.tag-cloud-placeholder) {
+.hero-shortcuts button {
+  min-height: 30px;
+  padding: 4px 0;
+  color: var(--text-secondary);
   background: transparent;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
+  border: 0;
+  border-bottom: 1px solid var(--border-medium);
+  font-size: 12px;
+  font-weight: 650;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
-.hero-aside :deep(.tag-cloud-wrap) {
-  padding: 12px 16px;
-  min-height: 260px;
+.hero-shortcuts button:hover {
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
-.hero-aside :deep(.hot-tagcloud) {
-  height: 240px !important;
+.results-search {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.35fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: end;
+  padding: 22px 26px;
+  background: var(--bg-paper);
+  border-top: 3px solid var(--text-primary);
+  border-bottom: 1px solid var(--border-medium);
+}
+
+.results-title {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.discovery-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 28px;
+  align-items: start;
+}
+
+.douban-hot-section,
+.trending-section {
+  min-width: 0;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-medium);
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.05;
+}
+
+.section-heading > span {
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.section-heading--compact {
+  align-items: start;
+}
+
+.trending-section {
+  position: sticky;
+  top: 84px;
+  padding: 18px;
+  background: var(--bg-paper);
+  border: 1px solid var(--border-medium);
+  box-shadow: var(--shadow-sm);
 }
 
 /* 统计和过滤器栏 */
 .stats-bar {
-  background: var(--bg-primary);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  background: var(--bg-paper);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
   padding: 16px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   animation: fadeIn 0.4s ease;
 }
 
@@ -713,7 +729,7 @@ function visibleSorted(items: any[]) {
   padding: 6px 12px;
   border: 1px solid var(--border-light);
   background: var(--bg-secondary);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
@@ -731,10 +747,10 @@ function visibleSorted(items: any[]) {
 }
 
 .filter-pill.active {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.28);
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px var(--primary-glow);
 }
 
 /* 排序选择器 */
@@ -790,10 +806,9 @@ function visibleSorted(items: any[]) {
 }
 
 .empty-card {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-xl);
+  background: var(--bg-paper);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
   padding: 32px;
   text-align: center;
   max-width: 400px;
@@ -871,53 +886,75 @@ function visibleSorted(items: any[]) {
 
 /* 移动端优化 */
 @media (max-width: 900px) {
-  .hero-row {
-    flex-direction: column;
+  .discovery-grid {
+    grid-template-columns: 1fr;
   }
 
-  .hero-aside {
-    width: 100%;
+  .trending-section {
+    position: static;
   }
 }
 
 @media (max-width: 640px) {
-  .hero-aside {
-    display: none;
+  .editorial-hero {
+    padding: 16px 14px 24px;
   }
 
-  .hero {
-    padding: 24px 18px;
+  .hero-rule {
+    padding: 0 4px 12px;
+    font-size: 8px;
   }
 
   .hero-content {
-    padding-left: 4px;
-  }
-
-  .hero-badge {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    margin-bottom: 10px;
+    padding: 24px 4px 16px;
   }
 
   .hero-title {
-    font-size: 26px;
+    font-size: 46px;
   }
 
   .hero-description {
-    font-size: 14px;
-    margin-bottom: 16px;
+    max-width: 290px;
+    font-size: 13px;
   }
 
-  .hero-feature {
-    font-size: 12px;
-    padding: 6px 12px;
+  .hero-shortcuts {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 0 4px 4px;
   }
 
-  .hero-shape {
-    width: 80px;
-    height: 80px;
-    right: 5%;
-    bottom: 5%;
+  .hero-shortcuts button {
+    flex: 0 0 auto;
+  }
+
+  .results-search {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 18px 14px;
+  }
+
+  .results-title {
+    font-size: 26px;
+  }
+
+  .section-heading {
+    align-items: start;
+  }
+
+  .section-heading h2 {
+    font-size: 24px;
+  }
+
+  .section-heading > span {
+    max-width: 100px;
+    text-align: right;
+  }
+
+  .trending-section {
+    padding: 14px;
   }
 
   .stats-bar {
@@ -974,14 +1011,13 @@ function visibleSorted(items: any[]) {
 
 /* 高对比度模式支持 */
 @media (prefers-contrast: high) {
-  .hero-title-line--accent {
-    -webkit-text-fill-color: var(--primary);
-    background: none;
+  .editorial-hero,
+  .trending-section {
+    border-width: 2px;
   }
 
-  .hero-badge,
-  .hero-feature {
-    border-width: 2px;
+  .hero-shortcuts button {
+    border-bottom-width: 2px;
   }
 
   .filter-pill.active {
@@ -999,18 +1035,9 @@ function visibleSorted(items: any[]) {
 
 /* 减少动画模式支持 */
 @media (prefers-reduced-motion: reduce) {
-  .hero-badge,
+  .editorial-hero,
   .hero-title,
   .hero-description,
-  .hero-feature {
-    animation: none;
-  }
-
-  .hero-feature:hover {
-    transform: none;
-  }
-
-  .hero,
   .stats-bar,
   .results-section,
   .empty-state,

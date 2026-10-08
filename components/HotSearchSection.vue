@@ -166,36 +166,36 @@ defineExpose({ init, refresh });
 }
 
 .tag-cloud-wrap {
-  min-height: 340px;
-  padding: 20px;
-  background: var(--bg-surface);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--border-light);
-  border-radius: 14px;
+  min-height: 280px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .tag-cloud-placeholder {
-  min-height: 340px;
-  background: var(--bg-surface);
+  min-height: 280px;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-light);
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
 }
 
 /* 覆盖 TagCloud 默认样式，适配项目主题 */
 .tag-cloud-wrap :deep(.hot-tagcloud) {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 280px;
   /* GPU 加速 */
   transform: translateZ(0);
   will-change: transform;
 }
 
 .tag-cloud-wrap :deep(.hot-tagcloud-item) {
-  color: var(--primary-dark, #0f766e) !important;
-  font-weight: 600 !important;
-  font-family: inherit !important;
+  color: var(--primary) !important;
+  font-weight: 650 !important;
+  font-family: var(--font-display) !important;
   cursor: pointer;
   transition: opacity 0.15s ease;
   /* GPU 加速 */
@@ -213,12 +213,12 @@ defineExpose({ init, refresh });
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 40px 20px;
+  min-height: 280px;
+  padding: 32px 16px;
   color: var(--text-secondary);
-  background: var(--bg-surface);
-  backdrop-filter: blur(8px);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-light);
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
 }
 
 .spinner {

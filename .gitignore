@@ -27,3 +27,4 @@ logs
 data/
 .playwright-mcp
 .vercel
+.env*

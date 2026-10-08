@@ -133,23 +133,21 @@ function formatDate(d?: string) {
 </script>
 
 <style scoped>
-/* 结果卡片主体 - Apple 风卡片设计 */
+/* 结果卡片主体 - 编辑式索引卡 */
 .result-card {
-  background: var(--bg-surface);
-  backdrop-filter: saturate(180%) blur(12px);
-  -webkit-backdrop-filter: saturate(180%) blur(12px);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 4px 16px rgba(17, 24, 39, 0.05);
+  background: var(--bg-paper);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   transition: box-shadow var(--transition-normal), transform var(--transition-normal),
     border-color var(--transition-normal);
 }
 
 .result-card:hover {
-  box-shadow: 0 4px 8px rgba(17, 24, 39, 0.06), 0 12px 32px rgba(17, 24, 39, 0.1);
-  transform: translateY(-2px);
-  border-color: var(--border-medium);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  border-color: var(--text-tertiary);
 }
 
 /* 卡片头部 */
@@ -157,8 +155,9 @@ function formatDate(d?: string) {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 15px 16px;
   background: var(--bg-surface-elevated);
+  border-top: 3px solid var(--text-primary);
   border-bottom: 1px solid var(--border-light);
   position: relative;
 }
@@ -171,7 +170,7 @@ function formatDate(d?: string) {
 .platform-badge {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,8 +198,9 @@ function formatDate(d?: string) {
 }
 
 .platform-title {
-  font-size: 16px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
@@ -220,7 +220,7 @@ function formatDate(d?: string) {
   padding: 6px 12px;
   background: var(--bg-btn);
   border: 1px solid var(--border-light);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
@@ -295,8 +295,8 @@ function formatDate(d?: string) {
   align-items: center;
   gap: 6px;
   text-decoration: none;
-  color: var(--primary);
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: 650;
   font-size: 14px;
   line-height: 1.4;
   transition: color var(--transition-fast), gap var(--transition-fast);
@@ -354,7 +354,7 @@ function formatDate(d?: string) {
   padding: 4px 8px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-light);
-  border-radius: 999px;
+  border-radius: 3px;
   font-size: 11px;
   color: var(--text-secondary);
   font-weight: 500;
@@ -385,7 +385,7 @@ function formatDate(d?: string) {
   padding: 6px 12px;
   background: var(--bg-btn);
   border: 1px solid var(--border-light);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
@@ -429,10 +429,10 @@ function formatDate(d?: string) {
   align-items: center;
   gap: 8px;
   padding: 9px 18px;
-  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
-  color: #fff;
+  background: var(--primary);
+  color: var(--text-on-primary);
   border: none;
-  border-radius: 999px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: -0.01em;

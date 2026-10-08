@@ -68,14 +68,8 @@ export default defineNuxtConfig({
     "/api/auth/**": { swr: false, cache: false },
     // 搜索接口依赖 Cookie 鉴权，禁止缓存避免 401 被缓存
     "/api/search": { swr: false, cache: false },
-    // 图片代理：允许边缘 SWR 缓存，长效命中；错误响应由接口内 no-store 覆盖
-    "/api/img": {
-      swr: 86400,
-      headers: {
-        "cache-control":
-          "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
-      },
-    },
+    // 图片代理返回二进制内容，禁用 Nitro ISR；缓存由接口响应头控制
+    "/api/img": { cache: false },
     "/**": { swr: 3600 },
   },
   runtimeConfig: {
